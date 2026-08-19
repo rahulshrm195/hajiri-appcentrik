@@ -253,148 +253,7 @@ input,select,textarea{font-family:'Inter',sans-serif;}
 }
 .inactive-label{font-size:10px;background:var(--red-light);color:var(--red);border-radius:4px;padding:1px 5px;font-weight:700;}
 
-  /* ══════════════════════════════════════════
-     NATIVE FEEL CSS
-  ══════════════════════════════════════════ */
-
-  /* Remove tap highlight everywhere */
-  * { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-
-  /* Prevent accidental text selection on UI elements */
-  button, .nav-item, .staff-card, .att-btn, .stat-card,
-  .chip, .auth-tab, .att-tab, .theme-btn, .detail-btn,
-  .bottom-nav, .app-header, .modal-handle, .biz-card {
-    -webkit-user-select: none;
-    user-select: none;
-  }
-
-  /* Allow text selection only in actual content */
-  input, textarea, .ledger-entry-info, .advance-info, p { user-select: text; }
-
-  /* Fix iOS input zoom — all inputs must be >= 16px */
-  input, select, textarea {
-    font-size: 16px !important;
-  }
-  .form-group input, .form-group select,
-  .adv-input, .remark-input, .hisab-wage-input,
-  .date-picker-input, .cal-emp-select, .report-emp-select {
-    font-size: 16px !important;
-  }
-
-  /* Prevent overscroll bounce on app container */
-  #app { overscroll-behavior: none; }
-  body { overscroll-behavior: none; overflow: hidden; }
-  .page-content { overscroll-behavior-y: contain; }
-
-  /* Page transition animations */
-  .page-slide { animation: pageSlideIn 0.25s cubic-bezier(0.4,0,0.2,1); }
-  @keyframes pageSlideIn {
-    from { opacity: 0; transform: translateX(18px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-
-  /* Button press micro-animation */
-  button:active, .att-btn:active, .staff-card:active,
-  .nav-item:active, .stat-card:active {
-    transform: scale(0.96);
-    transition: transform 0.1s ease;
-  }
-  .btn-primary:active   { transform: scale(0.97); }
-  .btn-save-all:active  { transform: scale(0.96); }
-
-  /* Smoother modal animation — spring feel */
-  .modal-sheet {
-    animation: sheetSpring 0.32s cubic-bezier(0.34,1.56,0.64,1) !important;
-  }
-  @keyframes sheetSpring {
-    from { transform: translateY(100%); opacity: 0.6; }
-    to   { transform: translateY(0);    opacity: 1; }
-  }
-  @media (min-width: 768px) {
-    .modal-sheet {
-      animation: scaleSpring 0.25s cubic-bezier(0.34,1.2,0.64,1) !important;
-    }
-    @keyframes scaleSpring {
-      from { opacity: 0; transform: scale(0.92); }
-      to   { opacity: 1; transform: scale(1); }
-    }
-  }
-
-  /* Skeleton loader */
-  .skeleton {
-    background: linear-gradient(90deg, var(--border2) 25%, var(--bg3) 50%, var(--border2) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.4s infinite;
-    border-radius: var(--radius-sm);
-  }
-  @keyframes shimmer {
-    from { background-position: 200% 0; }
-    to   { background-position: -200% 0; }
-  }
-  .skeleton-card {
-    background: var(--card);
-    border-radius: var(--radius-md);
-    padding: 14px;
-    border: 1px solid var(--border2);
-    margin-bottom: 10px;
-  }
-  .skeleton-line { height: 12px; margin-bottom: 8px; }
-  .skeleton-line-sm { height: 10px; width: 60%; }
-  .skeleton-avatar { width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0; }
-
-  /* Swipe handle visual cue on mobile */
-  @media (max-width: 767px) {
-    .modal-handle {
-      width: 40px; height: 5px;
-      background: var(--border2);
-      border-radius: 3px;
-      margin: 0 auto 16px;
-      cursor: grab;
-    }
-  }
-
-  /* Safe area bottom padding for home indicator */
-  .bottom-nav {
-    padding-bottom: max(env(safe-area-inset-bottom), 8px);
-  }
-  .page-content {
-    padding-bottom: calc(80px + env(safe-area-inset-bottom));
-  }
-
-  /* Attendance button satisfying press */
-  .att-btn {
-    transition: transform 0.1s ease, background 0.15s ease, border-color 0.15s ease;
-  }
-  .att-btn:active { transform: scale(0.93); }
-
-  /* Staff card press */
-  .staff-card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
-  .staff-card:active { transform: scale(0.97); box-shadow: none; }
-
-  /* Nav item press */
-  .nav-item { transition: color 0.15s ease, transform 0.1s ease; }
-  .nav-item:active { transform: scale(0.9); }
-
-  /* Smooth color transitions */
-  .att-btn, .btn-primary, .btn-secondary, .btn-amber,
-  .btn-save-all, .btn-sm { transition: transform 0.1s ease, opacity 0.15s ease; }
-
-  /* Toast improvement — more native style */
-  #toast {
-    border-radius: 14px;
-    font-size: 14px;
-    padding: 12px 20px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-    backdrop-filter: blur(8px);
-  }
-
-  /* Input focus — native feel */
-  input:focus, select:focus, textarea:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(5,150,105,0.15);
-  }
-
-</style>
+  </style>
 </head>
 <body>
 <div id="app">
@@ -442,7 +301,7 @@ input,select,textarea{font-family:'Inter',sans-serif;}
   <div class="app-header">
     <div class="header-logo">🏢</div>
     <div class="header-info">
-      <h1>Hajiri <span style="font-size:10px;font-weight:500;opacity:0.6">v1.0.4</span></h1>
+      <h1>Hajiri <span style="font-size:10px;font-weight:500;opacity:0.6">v1.0.3</span></h1>
       <p id="headerSub">Loading...</p>
     </div>
     <div class="header-actions">
@@ -801,7 +660,7 @@ async function doRegister(){
     if(snap.exists()){showRegErr('Business ID taken');showLoader(false);return;}
     await setDoc(doc(db,'businesses',bizId),{businessName:bizName,ownerName:owner,phone,createdAt:new Date().toISOString(),active:true});
     await setDoc(doc(db,'businesses',bizId,'users','admin'),{name:owner,role:'admin',userId:'admin',password:pass,phone,wage:0,joinDate:todayStr(),color:'#059669',active:true});
-    showLoader(false);haptic('success');showToast('✅ Business created! Please sign in.');
+    showLoader(false);showToast('✅ Business created! Please sign in.');
     switchAuthTab('login');
     document.getElementById('loginBizId').value=bizId;
     document.getElementById('loginUserId').value='admin';
@@ -826,7 +685,7 @@ async function doLogin(){
     if(!found){showLoginErr('Invalid User ID or password');showLoader(false);return;}
     currentBizId=bizId;currentUser=found;
     localStorage.setItem('hajiri_session',JSON.stringify({bizId,userId,pass}));
-    await loadAllData();startApp();showLoader(false);haptic('success');
+    await loadAllData();startApp();showLoader(false);
   }catch(e){showLoader(false);showLoginErr('Login failed. Try again.');}
 }
 function showLoginErr(msg){const e=document.getElementById('loginError');e.textContent=msg;e.style.display='block';}
@@ -859,8 +718,6 @@ function startApp(){
   ['advDate','editAttDate','sfJoinDate','settleDate','deductDate'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=todayStr();});
   const dp=document.getElementById('dailyDatePicker');if(dp){dp.value=todayStr();dp.max=todayStr();}
   setupNav();switchPage('home');updateReqBadge();updateNotifBadge();
-  // Native feel initializers
-  setTimeout(()=>{ initSwipeToDismiss(); initPullToRefresh(); }, 500);
   // Hide Edit Business for non-admin roles
   const ebRow = document.getElementById('editBizBtnRow');
   if (ebRow) ebRow.style.display = currentUser.role === 'admin' ? 'flex' : 'none';
@@ -868,7 +725,7 @@ function startApp(){
   const lastSeenVersion = localStorage.getItem('hajiri_last_version');
   if(lastSeenVersion !== 'v1.0.0') {
     setTimeout(() => openModal('whatsNewModal'), 800);
-    localStorage.setItem('hajiri_last_version', 'v1.0.4');
+    localStorage.setItem('hajiri_last_version', 'v1.0.3');
   }
   const theme=localStorage.getItem('hajiri_theme')||'auto';setTheme(theme);
 }
@@ -877,9 +734,7 @@ function setupNav(){
   if(currentUser.role==='employee')s.style.display='none';else s.style.display='flex';
 }
 function switchPage(page){
-  haptic('light');
-  animatePage('page'+page.charAt(0).toUpperCase()+page.slice(1));
-  ['home','attendance','requests','staff'].forEach(p=>{
+    ['home','attendance','requests','staff'].forEach(p=>{
     document.getElementById(`page${p.charAt(0).toUpperCase()+p.slice(1)}`).style.display=p===page?'block':'none';
     document.getElementById(`nav-${p}`).classList.toggle('active',p===page);
   });
@@ -968,7 +823,7 @@ function renderDailyAtt(){
   }).join('');
 }
 
-async function setDailyAtt(userId,val){ haptic('light');
+async function setDailyAtt(userId,val){
   await saveAttendance(userId,dailySelectedDate,val);
   const row=document.getElementById('attrow_'+userId);if(!row)return;
   row.querySelectorAll('.att-btn').forEach(b=>b.className='att-btn');
@@ -995,7 +850,7 @@ async function doClearAtt(userId){
   if(row){row.querySelectorAll('.att-btn').forEach(b=>b.className='att-btn');row.querySelector('.att-clear-btn')?.remove();}
   renderHome();
 }
-async function saveAllAttendance(){ haptic('medium');
+async function saveAllAttendance(){
   const users=getData('users',[]).filter(u=>u.role!=='admin'&&u.active!==false);
   const date=dailySelectedDate;const vals=[0,0.5,1,1.5,2];let attSaved=0,advSaved=0;
   showLoader(true);
@@ -1207,8 +1062,6 @@ function openHisabDetail(userId,ym){
 function closeHisabDetail(){document.getElementById('hisabSummaryView').style.display='block';document.getElementById('hisabDetailView').style.display='none';}
 
 function renderStaff(){
-  showStaffSkeleton();
-  setTimeout(()=>{
   const users=getData('users',[]).filter(u=>u.role!=='admin');
   const att=getData('attendance',{});const today=todayStr();const list=document.getElementById('staffList');
   const active=users.filter(u=>u.active!==false);const inactive=users.filter(u=>u.active===false);
@@ -1218,7 +1071,6 @@ function renderStaff(){
   let html=active.map(u=>sc(u)).join('');
   if(inactive.length>0)html+=`<div style="grid-column:1/-1;margin-top:8px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;cursor:pointer" onclick="toggleInactiveSection()"><div class="section-title">Inactive Staff (${inactive.length})</div><span id="inactiveToggleIcon">▸</span></div><div id="inactiveStaffList" class="staff-grid" style="display:none">${inactive.map(u=>sc(u,true)).join('')}</div></div>`;
   list.innerHTML=html;
-  },50);
 }
 function toggleInactiveSection(){const el=document.getElementById('inactiveStaffList');const ic=document.getElementById('inactiveToggleIcon');if(!el)return;const h=el.style.display==='none';el.style.display=h?'grid':'none';if(ic)ic.textContent=h?'▾':'▸';}
 
@@ -1591,7 +1443,6 @@ function initKeyboardShortcuts(){document.addEventListener('keydown',e=>{const i
 
 const W=window;
 W.openModal=openModal;
-W.haptic=haptic;
 W.closeModal=closeModal;
 W.calNav=(...a)=>{if(window._calNavFn)window._calNavFn(...a);};
 W.openRequestModal=(type)=>{showToast('Coming soon');};
