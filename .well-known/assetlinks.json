@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "in.appcentrik.hajiri",
+        "sha256_cert_fingerprints": ["02:38:3B:6A:13:EC:58:58:0F:2A:90:A9:D3:49:D9:3F:39:57:18:FD:64:22:C9:0C:8E:4F:75:32:FC:2D:50:E5"]
+      }
+    }]
