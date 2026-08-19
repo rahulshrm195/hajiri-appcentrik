@@ -1311,6 +1311,8 @@ function initKeyboardShortcuts(){document.addEventListener('keydown',e=>{const i
 })();
 
 const W=window;
+W.openModal=openModal;
+W.closeModal=closeModal;
 W.switchAuthTab=switchAuthTab;W.checkBizIdAvailability=checkBizIdAvailability;W.doLogin=doLogin;W.doRegister=doRegister;
 W.switchPage=switchPage;W.switchAttTab=switchAttTab;W.renderCalendar=renderCalendar;W.calNav=(...a)=>window.calNav?.(...a);
 W.renderHisabSummary=renderHisabSummary;W.openHisabDetail=openHisabDetail;W.closeHisabDetail=closeHisabDetail;
