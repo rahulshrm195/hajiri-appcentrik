@@ -300,7 +300,7 @@ input,select,textarea{font-family:'Inter',sans-serif;}
   <div class="app-header">
     <div class="header-logo">🏢</div>
     <div class="header-info">
-      <h1>Hajiri <span style="font-size:10px;font-weight:500;opacity:0.6">v1.0.0</span></h1>
+      <h1>Hajiri <span style="font-size:10px;font-weight:500;opacity:0.6">v1.0.1</span></h1>
       <p id="headerSub">Loading...</p>
     </div>
     <div class="header-actions">
@@ -705,7 +705,7 @@ function startApp(){
   const lastSeenVersion = localStorage.getItem('hajiri_last_version');
   if(lastSeenVersion !== 'v1.0.0') {
     setTimeout(() => openModal('whatsNewModal'), 800);
-    localStorage.setItem('hajiri_last_version', 'v1.0.0');
+    localStorage.setItem('hajiri_last_version', 'v1.0.1');
   }
   const theme=localStorage.getItem('hajiri_theme')||'auto';setTheme(theme);
 }
@@ -891,7 +891,8 @@ function renderCalendar(){
     cal+=`</div></div><div class="stat-grid" style="margin-top:12px"><div class="stat-card"><div class="stat-icon">📅</div><div class="stat-value" style="color:var(--green)">${td}</div><div class="stat-label">Days</div></div><div class="stat-card"><div class="stat-icon">💰</div><div class="stat-value" style="color:var(--green);font-size:20px">${fmtMoney(te)}</div><div class="stat-label">Earned</div></div></div>`;
     content.innerHTML=cal;window._calY=cy;window._calM=cm;
   }
-  window.calNav=(dir)=>{cm+=dir;if(cm<0){cm=11;cy--;}if(cm>11){cm=0;cy++;}render();};render();
+  window._calNavFn=(dir)=>{cm+=dir;if(cm<0){cm=11;cy--;}if(cm>11){cm=0;cy++;}render();};
+  window.calNav=window._calNavFn;render();
 }
 function openEditAtt(userId,date){
   editingAttUserId=userId;editingAttDate=date;
@@ -1297,13 +1298,23 @@ async function exportDetailPDF(userId,ym){showToast('📄 Generating...');const 
 
 function attBtnKeydown(e,userId,val,idx){const vals=[0,0.5,1,1.5,2];if(e.key===' '||e.key==='Enter'){e.preventDefault();setDailyAtt(userId,val);return;}if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const ni=e.key==='ArrowRight'?Math.min(idx+1,vals.length-1):Math.max(idx-1,0);document.getElementById(`attbtn_${userId}_${vals[ni]}`)?.focus();return;}if(e.key==='Tab'&&!e.shiftKey&&idx===vals.length-1){e.preventDefault();document.getElementById(`adv_amt_${userId}`)?.focus();return;}if(e.key==='Tab'&&e.shiftKey&&idx===0){e.preventDefault();const users=getData('users',[]).filter(u=>u.role!=='admin'&&u.active!==false);const ci=users.findIndex(u=>u.id===userId);if(ci>0)document.getElementById(`remark_${users[ci-1].id}`)?.focus();return;}}
 function remarkKeydown(e,userId){if(e.key==='Tab'&&!e.shiftKey){const users=getData('users',[]).filter(u=>u.role!=='admin'&&u.active!==false);const ci=users.findIndex(u=>u.id===userId);if(ci<users.length-1){e.preventDefault();document.getElementById(`attbtn_${users[ci+1].id}_0`)?.focus();}}}
+function initModalClickOutside(){
+  document.querySelectorAll('.modal-overlay').forEach(overlay=>{
+    overlay.addEventListener('click', e=>{
+      if(e.target===overlay){
+        overlay.classList.remove('open');
+      }
+    });
+  });
+}
+
 function initKeyboardShortcuts(){document.addEventListener('keydown',e=>{const ia=document.getElementById('pageAttendance')?.style.display!=='none';const id=document.getElementById('attTabDaily')?.style.display!=='none';if(!ia||!id)return;if((e.metaKey||e.ctrlKey)&&e.key==='s'){e.preventDefault();saveAllAttendance();}});}
 
 (async()=>{
   const btn=document.getElementById('loginBtn');
   const en=()=>{if(btn){btn.disabled=false;btn.textContent='Sign In';btn.style.opacity='1';}};
   try{
-    initKeyboardShortcuts();checkSuperAdmin();
+    initKeyboardShortcuts();initModalClickOutside();checkSuperAdmin();
     const saved=localStorage.getItem('hajiri_session');
     if(saved){const{bizId,userId,pass}=JSON.parse(saved);if(bizId&&userId&&pass){const bs=await getDoc(doc(db,'businesses',bizId));if(bs.exists()&&bs.data().active!==false){const us=await getDocs(query(collection(db,'businesses',bizId,'users'),where('userId','==',userId)));let fu=null;us.forEach(d=>{if(d.data().password===pass)fu={id:d.id,...d.data()};});if(fu){currentBizId=bizId;currentUser=fu;await loadAllData();startApp();en();return;}}}}
     en();
@@ -1313,6 +1324,8 @@ function initKeyboardShortcuts(){document.addEventListener('keydown',e=>{const i
 const W=window;
 W.openModal=openModal;
 W.closeModal=closeModal;
+W.calNav=(...a)=>{if(window._calNavFn)window._calNavFn(...a);};
+W.openRequestModal=(type)=>{showToast('Coming soon');};
 W.switchAuthTab=switchAuthTab;W.checkBizIdAvailability=checkBizIdAvailability;W.doLogin=doLogin;W.doRegister=doRegister;
 W.switchPage=switchPage;W.switchAttTab=switchAttTab;W.renderCalendar=renderCalendar;W.calNav=(...a)=>window.calNav?.(...a);
 W.renderHisabSummary=renderHisabSummary;W.openHisabDetail=openHisabDetail;W.closeHisabDetail=closeHisabDetail;
@@ -1341,7 +1354,7 @@ W.approveRequest=approveRequest;W.rejectRequest=rejectRequest;W.recalcHisabTotal
     <!-- v1.0.0 -->
     <div style="margin-bottom:20px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-        <div style="background:var(--green);color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px">v1.0.0</div>
+        <div style="background:var(--green);color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px">v1.0.1</div>
         <div style="font-size:11px;color:var(--text2)">August 2026 — Launch</div>
       </div>
       <div style="background:var(--bg3);border-radius:12px;padding:14px;font-size:13px;line-height:1.9;color:var(--text)">
@@ -1359,7 +1372,20 @@ W.approveRequest=approveRequest;W.rejectRequest=rejectRequest;W.recalcHisabTotal
       </div>
     </div>
 
-    <div style="text-align:center;padding:8px;background:var(--bg3);border-radius:10px;font-size:11px;color:var(--text2)">
+    <!-- v1.0.1 -->
+    <div style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <div style="background:var(--green);color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px">v1.0.1</div>
+        <div style="font-size:11px;color:var(--text2)">August 2026 — Bug Fixes</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:12px;padding:14px;font-size:13px;line-height:1.9;color:var(--text)">
+        🐛 Fixed all modals not closing on mobile (Cancel buttons, tap outside)<br>
+        🔑 openModal / closeModal now properly exposed to global scope<br>
+        📅 Calendar navigation (← →) fixed on mobile
+      </div>
+    </div>
+
+        <div style="text-align:center;padding:8px;background:var(--bg3);border-radius:10px;font-size:11px;color:var(--text2)">
       More updates coming soon 🚀
     </div>
   </div>
