@@ -266,6 +266,7 @@ input,select,textarea{font-family:'Inter',sans-serif;}
     <div class="auth-logo-icon">🏢</div>
     <h1>Hajiri</h1>
     <p>Attendance, simplified.</p>
+    <p style="font-size:11px;opacity:0.5;margin-top:6px;letter-spacing:0.3px">v1.0.4</p>
   </div>
   <div class="auth-card">
     <div class="auth-tabs">
@@ -301,7 +302,7 @@ input,select,textarea{font-family:'Inter',sans-serif;}
   <div class="app-header">
     <div class="header-logo">🏢</div>
     <div class="header-info">
-      <h1>Hajiri <span style="font-size:10px;font-weight:500;opacity:0.6">v1.0.3</span></h1>
+      <h1>Hajiri <span style="font-size:10px;font-weight:500;opacity:0.6">v1.0.4</span></h1>
       <p id="headerSub">Loading...</p>
     </div>
     <div class="header-actions">
@@ -725,7 +726,7 @@ function startApp(){
   const lastSeenVersion = localStorage.getItem('hajiri_last_version');
   if(lastSeenVersion !== 'v1.0.0') {
     setTimeout(() => openModal('whatsNewModal'), 800);
-    localStorage.setItem('hajiri_last_version', 'v1.0.3');
+    localStorage.setItem('hajiri_last_version', 'v1.0.4');
   }
   const theme=localStorage.getItem('hajiri_theme')||'auto';setTheme(theme);
 }
@@ -774,7 +775,7 @@ function renderAdminHome(c){
   </div>
   <div class="section-header"><span class="section-title">Today's Attendance</span><button class="section-action" onclick="switchPage('attendance')">Mark All →</button></div>
   ${users.length===0?'<div class="empty-state"><div class="emoji">👥</div><p>No staff added yet</p></div>':
-  '<div class="staff-grid">'+users.map(u=>{const v=att[u.id]?.[today];const chip=v!==undefined?`<span class="chip chip-${v==0?'red':v==0.5?'orange':v==1?'green':v==1.5?'purple':'pink'}">${ATT_LABELS[String(v)]}</span>`:'<span class="chip chip-yellow">Not Marked</span>';return`<div class="staff-card" onclick="openStaffDetail('${u.id}')"><div class="staff-avatar" style="background:${u.color||COLORS[0]}">${u.name[0].toUpperCase()}</div><div class="staff-name">${u.name}</div><div class="staff-role">${u.role}</div>${chip}</div>`;}).join('')+'</div>'}`;
+  '<div class="staff-grid">'+users.map(u=>{const v=att[u.id]?.[today];const chip=v!==undefined?`<span class="chip chip-${v==0?'red':v==0.5?'orange':v==1?'green':v==1.5?'purple':'pink'}">${ATT_LABELS[String(v)]}</span>`:'<span class="chip chip-yellow">Not Marked</span>';return`<div class="staff-card" onclick="openQuickMark('${u.id}')"><div class="staff-avatar" style="background:${u.color||COLORS[0]}">${u.name[0].toUpperCase()}</div><div class="staff-name">${u.name}</div><div class="staff-role">${u.role}</div>${chip}</div>`;}).join('')+'</div>'}`;
 }
 function renderEmpHome(c){
   const att=getData('attendance',{})[currentUser.id]||{};
@@ -1450,7 +1451,11 @@ W.switchAuthTab=switchAuthTab;W.checkBizIdAvailability=checkBizIdAvailability;W.
 W.switchPage=switchPage;W.switchAttTab=switchAttTab;W.renderCalendar=renderCalendar;W.calNav=(...a)=>window.calNav?.(...a);
 W.renderHisabSummary=renderHisabSummary;W.openHisabDetail=openHisabDetail;W.closeHisabDetail=closeHisabDetail;
 W.updateHisabWage=updateHisabWage;W.saveHisabWages=saveHisabWages;W.exportHisabPDF=exportHisabPDF;W.exportDetailPDF=exportDetailPDF;W.exportLedgerPDF=exportLedgerPDF;
-W.openStaffDetail=openStaffDetail;W.editStaff=editStaff;W.saveStaff=saveStaff;W.deleteStaff=deleteStaff;W.deactivateStaff=deactivateStaff;W.reactivateStaff=reactivateStaff;W.toggleInactiveSection=toggleInactiveSection;W.openAddStaffModal=openAddStaffModal;
+W.openStaffDetail=openStaffDetail;
+W.openQuickMark=openQuickMark;
+W.qmSelectAtt=qmSelectAtt;
+W.saveQuickMark=saveQuickMark;
+W.goToStaffDetail=goToStaffDetail;W.editStaff=editStaff;W.saveStaff=saveStaff;W.deleteStaff=deleteStaff;W.deactivateStaff=deactivateStaff;W.reactivateStaff=reactivateStaff;W.toggleInactiveSection=toggleInactiveSection;W.openAddStaffModal=openAddStaffModal;
 W.addWageHistoryEntry=addWageHistoryEntry;W.removeWageHistoryEntry=removeWageHistoryEntry;
 W.openLedger=openLedger;W.renderLedger=renderLedger;W.recordSettlement=recordSettlement;
 W.editOpeningBalance=editOpeningBalance;W.saveOpeningBalance=saveOpeningBalance;W.deleteOpeningBalance=deleteOpeningBalance;
@@ -1514,6 +1519,19 @@ W.approveRequest=approveRequest;W.rejectRequest=rejectRequest;W.recalcHisabTotal
         📱 <strong>iOS zoom fix</strong> — No more page zoom on input focus<br>
         ✨ <strong>Micro-animations</strong> — Button press, card tap animations<br>
         🎯 <strong>Native scrolling</strong> — Removed bounce and tap highlights
+      </div>
+    </div>
+
+    <!-- v1.0.4 -->
+    <div style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <div style="background:var(--green);color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px">v1.0.4</div>
+        <div style="font-size:11px;color:var(--text2)">August 2026 — UX Improvement</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:12px;padding:14px;font-size:13px;line-height:1.9;color:var(--text)">
+        ⚡ <strong>Quick Mark from Home</strong> — Tap any employee on home screen to mark attendance, add advance and remarks instantly<br>
+        🔗 <strong>Full Details button</strong> — Jump to complete staff detail from the quick mark modal<br>
+        🔢 <strong>Version on login screen</strong> — App version now visible on login screen
       </div>
     </div>
 
@@ -1592,6 +1610,37 @@ W.approveRequest=approveRequest;W.rejectRequest=rejectRequest;W.recalcHisabTotal
     <div style="display:flex;gap:8px">
       <button class="btn-secondary" style="flex:1" onclick="closeModal('editMyBizModal')">Cancel</button>
       <button class="btn-primary" style="flex:1" onclick="saveMyBizDetails()">Save</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Quick Mark Modal -->
+<div class="modal-overlay" id="quickMarkModal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div id="qmAvatar" style="width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;flex-shrink:0"></div>
+      <div>
+        <div id="qmName" style="font-family:'Poppins',sans-serif;font-size:16px;font-weight:800"></div>
+        <div id="qmDate" style="font-size:12px;color:var(--text2)"></div>
+      </div>
+    </div>
+    <!-- Attendance buttons -->
+    <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Mark Attendance</div>
+    <div style="display:flex;gap:6px;margin-bottom:14px" id="qmAttBtns"></div>
+    <!-- Advance -->
+    <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Quick Advance</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <input type="number" id="qmAdvAmt" placeholder="₹ Amount" min="1" class="adv-input adv-amount" style="width:110px">
+      <input type="text" id="qmAdvNote" placeholder="Note (optional)" class="adv-input adv-note">
+    </div>
+    <!-- Remark -->
+    <input type="text" id="qmRemark" placeholder="📝 Remarks..." class="remark-input" style="margin-bottom:14px">
+    <div style="display:flex;gap:8px">
+      <button class="btn-secondary" style="flex:1" onclick="closeModal('quickMarkModal')">Cancel</button>
+      <button class="btn-primary" style="flex:1" onclick="saveQuickMark()">Save</button>
+      <button class="btn-sm" style="padding:13px 12px;background:var(--bg3);color:var(--text2);border:1.5px solid var(--border2)" onclick="goToStaffDetail()">Full Details →</button>
     </div>
   </div>
 </div>
