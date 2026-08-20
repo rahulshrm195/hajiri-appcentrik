@@ -266,7 +266,7 @@ input,select,textarea{font-family:'Inter',sans-serif;}
     <div class="auth-logo-icon">🏢</div>
     <h1>Hajiri</h1>
     <p>Attendance, simplified.</p>
-    <p style="font-size:11px;opacity:0.5;margin-top:6px;letter-spacing:0.3px">v1.0.5</p>
+    <p style="font-size:11px;opacity:0.5;margin-top:6px;letter-spacing:0.3px">v1.0.6</p>
   </div>
   <div class="auth-card">
     <div class="auth-tabs">
@@ -289,6 +289,11 @@ input,select,textarea{font-family:'Inter',sans-serif;}
         <input type="text" id="regBizId" placeholder="e.g. amarfurniture" autocapitalize="none" oninput="checkBizIdAvailability(this.value)">
         <div class="biz-id-status" id="bizIdStatus"></div>
       </div>
+      <div class="form-group">
+        <label>Your User ID <span style="font-weight:400;text-transform:none;font-size:10px">(your personal login ID)</span></label>
+        <input type="text" id="regUserId" placeholder="e.g. rahul or owner" autocapitalize="none">
+        <div style="font-size:11px;color:var(--text3);margin-top:4px">This is what you will type to log in. No spaces.</div>
+      </div>
       <div class="form-group"><label>Password</label><input type="password" id="regPassword" placeholder="Min 6 characters"></div>
       <div class="form-group"><label>Confirm Password</label><input type="password" id="regConfirmPass" placeholder="Repeat password"></div>
       <button class="btn-auth" id="registerBtn" onclick="doRegister()">Create Business</button>
@@ -302,7 +307,7 @@ input,select,textarea{font-family:'Inter',sans-serif;}
   <div class="app-header">
     <div class="header-logo">🏢</div>
     <div class="header-info">
-      <h1>Hajiri <span style="font-size:10px;font-weight:500;opacity:0.6">v1.0.5</span></h1>
+      <h1>Hajiri <span style="font-size:10px;font-weight:500;opacity:0.6">v1.0.6</span></h1>
       <p id="headerSub">Loading...</p>
     </div>
     <div class="header-actions">
@@ -650,11 +655,13 @@ async function doRegister(){
   const owner=document.getElementById('regOwnerName').value.trim();
   const phone=document.getElementById('regPhone').value.trim();
   const bizId=document.getElementById('regBizId').value.toLowerCase().trim();
+  const adminUserId=document.getElementById('regUserId').value.toLowerCase().trim().replace(/\s+/g,'');
   const pass=document.getElementById('regPassword').value;
   const confirm=document.getElementById('regConfirmPass').value;
   const err=document.getElementById('registerError');err.style.display='none';
-  if(!bizName||!owner||!phone||!bizId||!pass){showRegErr('All fields required');return;}
+  if(!bizName||!owner||!phone||!bizId||!adminUserId||!pass){showRegErr('All fields required');return;}
   if(bizId.length<3){showRegErr('Business ID min 3 characters');return;}
+  if(adminUserId.length<3){showRegErr('User ID min 3 characters');return;}
   if(!bizIdAvailable){showRegErr('Choose an available Business ID');return;}
   if(pass!==confirm){showRegErr('Passwords do not match');return;}
   if(pass.length<6){showRegErr('Password min 6 characters');return;}
@@ -663,16 +670,16 @@ async function doRegister(){
     const snap=await getDoc(doc(db,'businesses',bizId));
     if(snap.exists()){showRegErr('Business ID taken');showLoader(false);return;}
     await setDoc(doc(db,'businesses',bizId),{businessName:bizName,ownerName:owner,phone,createdAt:new Date().toISOString(),active:true});
-    await setDoc(doc(db,'businesses',bizId,'users','admin'),{name:owner,role:'admin',userId:'admin',password:pass,phone,wage:0,joinDate:todayStr(),color:'#059669',active:true});
-    // Create Firebase Auth account for admin
+    await setDoc(doc(db,'businesses',bizId,'users','admin'),{name:owner,role:'admin',userId:adminUserId,password:pass,phone,wage:0,joinDate:todayStr(),color:'#059669',active:true});
+    // Create Firebase Auth account for admin using chosen userId
     try{
-      await createUserWithEmailAndPassword(auth,authEmail(bizId,'admin'),pass);
+      await createUserWithEmailAndPassword(auth,authEmail(bizId,adminUserId),pass);
       await signOut(auth);
     }catch(authErr){console.warn('Auth account warning:',authErr.message);}
     showLoader(false);showToast('✅ Business created! Please sign in.');
     switchAuthTab('login');
     document.getElementById('loginBizId').value=bizId;
-    document.getElementById('loginUserId').value='admin';
+    document.getElementById('loginUserId').value=adminUserId;
   }catch(e){showLoader(false);showRegErr('Registration failed: '+e.message);}
 }
 function showRegErr(msg){const e=document.getElementById('registerError');e.textContent=msg;e.style.display='block';}
@@ -770,7 +777,7 @@ function startApp(){
   const lastSeenVersion = localStorage.getItem('hajiri_last_version');
   if(lastSeenVersion !== 'v1.0.0') {
     setTimeout(() => openModal('whatsNewModal'), 800);
-    localStorage.setItem('hajiri_last_version', 'v1.0.5');
+    localStorage.setItem('hajiri_last_version', 'v1.0.6');
   }
   const theme=localStorage.getItem('hajiri_theme')||'auto';setTheme(theme);
 }
@@ -1583,6 +1590,18 @@ W.approveRequest=approveRequest;W.rejectRequest=rejectRequest;W.recalcHisabTotal
       </div>
     </div>
 
+    <!-- v1.0.6 -->
+    <div style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <div style="background:var(--green);color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px">v1.0.6</div>
+        <div style="font-size:11px;color:var(--text2)">August 2026 — Improvement</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:12px;padding:14px;font-size:13px;line-height:1.9;color:var(--text)">
+        🆔 <strong>Custom User ID on registration</strong> — Choose your own login User ID when registering your business<br>
+        🔡 No more default "admin" — personalize from day one
+      </div>
+    </div>
+
     <!-- v1.0.5 -->
     <div style="margin-bottom:20px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
@@ -1612,6 +1631,18 @@ W.approveRequest=approveRequest;W.rejectRequest=rejectRequest;W.recalcHisabTotal
         📱 <strong>iOS zoom fix</strong> — No more page zoom on input focus<br>
         ✨ <strong>Micro-animations</strong> — Button press, card tap animations<br>
         🎯 <strong>Native scrolling</strong> — Removed bounce and tap highlights
+      </div>
+    </div>
+
+    <!-- v1.0.6 -->
+    <div style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <div style="background:var(--green);color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px">v1.0.6</div>
+        <div style="font-size:11px;color:var(--text2)">August 2026 — Improvement</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:12px;padding:14px;font-size:13px;line-height:1.9;color:var(--text)">
+        🆔 <strong>Custom User ID on registration</strong> — Choose your own login User ID when registering your business<br>
+        🔡 No more default "admin" — personalize from day one
       </div>
     </div>
 
